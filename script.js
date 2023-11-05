@@ -1,211 +1,217 @@
 let currentRound = 0;
-let startTime;
-let timerValue = 0;
+let countdownValue = 5;
+let roundTimerValue = 0;
 let countdownInterval;
+let roundTimerInterval;
 let clues = [];
-let countdownCard;
-let countdownTimerValue;
-let countdownTimerInterval;
 
 const rounds = [
   {
+    roundHeading: 'Round 1',
     question: 'What is the capital of France?',
     answer: 'Paris',
-    clue: 'Clue 1 for Round 1',
+    image: null,
   },
   {
+    roundHeading: 'Round 2',
     question: 'Which planet is known as the Red Planet?',
     answer: 'Mars',
-    clue: 'Clue 2 for Round 2',
+    image: 'mars.jpg',
   },
-  {
-    question: 'Which planet is known as the Red Planet?',
-    answer: 'Mars',
-    clue: 'Clue 2 for Round 2',
-  },
-  {
-    question: 'Which planet is known as the Red Planet?',
-    answer: 'Mars',
-    clue: 'Clue 2 for Round 2',
-  },
-  {
-    question: 'Which planet is known as the Red Planet?',
-    answer: 'Mars',
-    clue: 'Clue 2 for Round 2',
-  },
-  
+  // Add more rounds as needed
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
-  hideRound();
-  hideCongratulations();
   showPopup();
 });
 
 function showPopup() {
-  startTime = Date.now();
   const popup = document.getElementById('popup');
-  showCardView(popup);
+  popup.style.display = 'block';
   startCountdown();
 }
 
-function startCountdown() {
-  timerValue = 5;
-  updateCountdown();
-  countdownInterval = setInterval(() => {
-    timerValue--;
-    updateCountdown();
+function showTimer(){
+  const timerCard = document.getElementById('timer-card');
+  timerCard.style.display = 'block';
+}
 
-    if (timerValue === 0) {
+function hideTimer(){
+  const timerCard = document.getElementById('timer-card');
+  timerCard.style.animation = 'slideOut 0.5s ease-in-out';
+  setTimeout(() => {
+    timerCard.style.display = 'none';
+    timerCard.style.animation = '';
+  }, 500);
+}
+function startTimer() {
+  let startTime = new Date().getTime();
+  setInterval(() => {
+    const currentTime = new Date().getTime();
+    const elapsedTime = Math.floor((currentTime - startTime) / 1000);
+    updateTimer(elapsedTime);
+  }, 1000);
+}
+
+function endTimer() {
+  const timerCard = document.getElementById('timer-card');
+  const timerText = document.getElementById('timerText');
+  const timerValue = timerText.innerText;
+  hideTimer();
+  return timerValue;
+}
+
+function updateTimer(seconds) {
+  const timerText = document.getElementById('timerText');
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  timerText.innerText = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+}
+
+function startCountdown() {
+  const countdownElement = document.getElementById('countdown');
+  countdownInterval = setInterval(() => {
+    countdownValue--;
+    countdownElement.innerText = countdownValue;
+
+    if (countdownValue === 0) {
       clearInterval(countdownInterval);
       hidePopup();
     }
   }, 1000);
 }
 
-function updateCountdown() {
-  const countdownElement = document.getElementById('timer');
-  const minutes = Math.floor(timerValue / 60);
-  const remainingSeconds = timerValue % 60;
-  countdownElement.innerText = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-}
-
 function hidePopup() {
   const popup = document.getElementById('popup');
-  hideCardView(popup);
-
-  popup.addEventListener('transitionend', () => {
-    popup.removeEventListener('transitionend', hidePopup);
-    showRound();
-  });
+  popup.style.display = 'none';
+  showRound();
 }
 
 function showRound() {
-  countdownCard = document.getElementById('countdownCard');
-  showCardView(countdownCard);
-  if (currentRound < rounds.length) {
-    const roundCard = document.getElementById('roundCard');
-    const roundHeading = document.getElementById('roundHeading');
-    const question = document.getElementById('question');
-    const answerInput = document.getElementById('answer');
-    const clueList = document.getElementById('clueList');
+  const roundCard = document.getElementById('roundCard');
+  const roundHeading = document.getElementById('roundHeading');
+  const question = document.getElementById('question');
+  const questionImage = document.getElementById('questionImage');
+  const answerInput = document.getElementById('answer');
+  const clueList = document.getElementById('clueList');
+  const roundTimer = document.getElementById('roundTimer');
 
-    roundHeading.innerText = `Round ${currentRound + 1}`;
-    question.innerText = rounds[currentRound].question;
-    answerInput.value = '';
-    clueList.innerHTML = '';
-
-    showCardView(roundCard);
-
-    for (let i = 0; i <= currentRound; i++) {
-      const clueItem = document.createElement('li');
-      clueItem.innerText = rounds[i].clue;
-      clueList.appendChild(clueItem);
-    }
-
-    startRoundCountdown();
-  } else {
-    showCongratulations();
-  }
-}
-
-function startRoundCountdown() {
-  countdownTimerValue = 30;
-  const countdownElement = document.getElementById('countdownTimer');
-  const submitAnswerBtn = document.getElementById('submitAnswerBtn');
-
-  submitAnswerBtn.disabled = false;
-  countdownInterval = setInterval(() => {
-    countdownTimerValue--;
-
-    const minutes = Math.floor(timerValue / 60);
-    const remainingSeconds = timerValue % 60;
-
-    countdownElement.innerText = `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
-
-    if (countdownTimerValue === 0) {
-      clearInterval(countdownTimerInterval);
-      answerInput.value = '';
-      checkAnswer();
-    }
-  }, 1000);
+  roundCard.style.display = 'block';
+  roundHeading.innerText = rounds[currentRound].roundHeading;
+  question.innerText = rounds[currentRound].question;
+  questionImage.src = rounds[currentRound].image || '';
+  answerInput.value = '';
+  clueList.innerHTML = '';
+  roundTimer.innerText = '0:00';
+  showtimer();
+  startRoundTimer();
 }
 
 function hideRound() {
-  const roundCard = document.getElementById('roundCard');
-  hideCardView(roundCard);
+    const roundCard = document.getElementById('roundCard');
+    revealClue();
+  }
 
-  roundCard.addEventListener('transitionend', () => {
-    roundCard.removeEventListener('transitionend', hideRound);
-    currentRound++;
-    showRound();
-  });
-}
-function hideCongratulations() {
-  const congratulationsCard = document.getElementById('congratulations');
-  hideCardView(congratulationsCard);
-
-  congratulationsCard.addEventListener('transitionend', () => {
-    congratulationsCard.removeEventListener('transitionend', hideCongratulations);
-    showRound();
-  });
-}
-
-function showCongratulations() {
-  const congratulationsCard = document.getElementById('congratulations');
-  const elapsedTime = getElapsedTime();
-  const timeTakenElement = document.getElementById('time-taken');
-  timeTakenElement.innerText = `Total Time Taken: ${elapsedTime}`;
-
-  showCardView(congratulationsCard);
-  endGame();
-}
-
-function endGame() {
-  clearInterval(countdownInterval);
-  const elapsedTime = getElapsedTime();
-  const timeTakenElement = document.getElementById('time-taken');
-  timeTakenElement.innerText = `Total Time Taken: ${elapsedTime}`;
-}
-
-function getElapsedTime() {
-  const currentTime = Date.now();
-  const elapsedMilliseconds = currentTime - startTime;
-  const elapsedSeconds = Math.floor(elapsedMilliseconds / 1000);
-  const minutes = Math.floor(elapsedSeconds / 60);
-  const seconds = elapsedSeconds % 60;
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-}
-
-function hideCardView(element) {
-  element.style.opacity = 0;
-  element.style.transform = 'translateY(20px)';
-  setTimeout(() => {
-    element.style.display = 'none';
-  }, 500);
-}
-
-function showCardView(element) {
-  element.style.display = 'block';
-  element.offsetHeight;
-  element.style.transition = 'opacity 0.5s, transform 0.5s';
-  element.style.opacity = 1;
-  element.style.transform = 'translateY(0)';
+function startRoundTimer() {
+  roundTimerValue = 0;
+  roundTimerInterval = setInterval(() => {
+    roundTimerValue++;
+    const minutes = Math.floor(roundTimerValue / 60);
+    const seconds = roundTimerValue % 60;
+    document.getElementById('roundTimer').innerText = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+  }, 1000);
 }
 
 function checkAnswer() {
   const answerInput = document.getElementById('answer');
-  const userAnswer = answerInput.value.toLowerCase(); // Convert to lowercase for case-insensitive comparison
+  const userAnswer = answerInput.value.trim().toLowerCase();
   const correctAnswer = rounds[currentRound].answer.toLowerCase();
 
-  clearInterval(countdownTimerInterval); // Stop the countdown timer
-
   if (userAnswer === correctAnswer) {
-    // Correct answer, move to the next round
-    hideRound();
+    clearInterval(roundTimerInterval);
+    revealClue();
   } else {
-    // Incorrect answer, clear the input field for reentry
-    answerInput.value = '';
-    // You can add logic here to notify the user that the answer is incorrect (e.g., display a message)
+    alert('Incorrect answer. Try again!');
   }
 }
+
+function revealClue() {
+  const clueList = document.getElementById('clueCard');
+  const currentClue = rounds[currentRound].clue;
+
+  clues.push(currentClue);
+
+  for (let i = 0; i <= currentRound; i++) {
+    const clueItem = document.createElement('li');
+    clueItem.innerText = clues[i];
+    clueList.appendChild(clueItem);
+  }
+
+  currentRound++;
+  if (currentRound < rounds.length) {
+    showRound();
+  } else {
+    roundCard.style.display ="none";
+    showClueCard();
+  }
+}
+
+function showClueCard() {
+  const clueCard = document.getElementById('clueCard');
+  const allClues = document.getElementById('allClues');
+  const clueAnswerInput = document.getElementById('clueAnswer');
+
+  clueCard.style.display = 'block';
+  allClues.innerHTML = clues.join('<br>');
+
+  document.getElementById('styled-button').addEventListener('click', function() {
+    const inputAnswer = clueAnswerInput.value.trim();
+    if (inputAnswer === '1234') {
+      hideClueCard();
+    } else {
+      clueAnswerInput.value = '';
+      clueAnswerInput.classList.add('shake-animation');
+      setTimeout(() => {
+        clueAnswerInput.classList.remove('shake-animation');
+      }, 500);
+    }
+  });
+}
+
+function hideClueCard() {
+  const clueCard = document.getElementById('clueCard');
+  clueCard.style.display = 'none';
+  hidetimer();
+  showCongratulations();
+}
+
+function showCongratulations() {
+  const congratulationsCard = document.getElementById('congratulations');
+  const elapsedTime = formatTime(roundTimerValue);
+  const timeTakenElement = document.getElementById('time-taken');
+  timeTakenElement.innerText = `Total Time Taken: ${elapsedTime}`;
+
+  congratulationsCard.style.display = 'block';
+}
+
+function formatTime(seconds) {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+}
+
+function checkClueAnswer() {
+    const clueAnswerInput = document.getElementById('clueAnswer');
+    const inputAnswer = clueAnswerInput.value.trim();
+  
+    if (inputAnswer === '1234') {
+      hideClueCard();
+    } else {
+      clueAnswerInput.value = '';
+      clueAnswerInput.classList.add('shake-animation');
+      setTimeout(() => {
+        clueAnswerInput.classList.remove('shake-animation');
+      }, 500);
+    }
+  }
+  

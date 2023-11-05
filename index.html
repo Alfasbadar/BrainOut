@@ -5,20 +5,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
-  <title>Game</title>
+  <title>Quiz Game</title>
 </head>
 <body>
-  <div id="popup" class="nft loading">
+
+  <div id= "popup" class="nft loading">
     <div class='main'>
       <h2>Instructions</h2>
-      <p class='description'>Our Kibertopiks will give you nothing; waste your money on us.</p>
+      <p class='description'>How fast you can think and perform?</p>
       <div class='tokenInfo'>
         <div class="price">
-          <p>Getting Ready</p>
+          <p>Getting ready</p>
         </div>
         <div class="duration">
           <ins>◷</ins>
-          <p id="timer">0</p>
+          <p id="countdown"></p>
         </div>
       </div>
       <hr />
@@ -26,37 +27,66 @@
         <div class='wrapper'>
           <img src="https://images.unsplash.com/photo-1620121692029-d088224ddc74?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80" alt="Creator" />
         </div>
-        <p><ins>ObcyFest</ins> Brain Out</p>
+        <p><ins>ObcyFest</ins> BrainOut</p>
       </div>
     </div>
   </div>
 
   <div id="roundCard" class="nft">
     <div class='main'>
-      <h2 id="roundHeading"></h2>
-      <p id="question" class='description'></p>
-      <input type="text" id="answer" placeholder="Your Answer" class="styled-input">
-          <!-- Add this button in the roundCard -->
-          <button id="checkAnswerBtn" onclick="checkAnswer()">Check Answer</button>
-
-          <!-- Add this new card for countdown -->
-
-
-      <ul id="clueList" class="clue-list"></ul>
+      <img id='questionImage' class='tokenImage' src="https://images.unsplash.com/photo-1621075160523-b936ad96132a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="image" />
+      <h2 id="roundHeading">Heading</h2>
+      <p id="question"></p>
+        <input type="text" id="answer" placeholder=" Answer" class="styled-input">
+        <button onclick="checkAnswer()" class="styled-button">Check Answer</button>
+      <hr />
+      <div class='creator'>
+        <div class='wrapper'>
+          <img src="https://images.unsplash.com/photo-1620121692029-d088224ddc74?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80" alt="Creator" />
+        </div><ins>Obcyfest</ins> 
+        <p>BrainOut</p>
+      </div>
     </div>
   </div>
-  
-  <div id="countdownCard" class="card">
-    <div id="countdownTimer">30</div>
-  </div>
 
-  <div id="congratulations" class="nft">
+  <div class="nft" id="clueCard">
     <div class='main'>
-      <h2>Congratulations!</h2>
-      <p id="time-taken" class='description'></p>
+      <img class='tokenImage' src="https://images.unsplash.com/photo-1621075160523-b936ad96132a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="NFT" />
+      <h2>Solve the clue</h2>
+      <p class='description'>Our Kibertopiks will give you nothing, waste your
+         money on us.</p>
+      <div id="allClues" class="clue-list"></div>
+      <input type="text" id="clueAnswer" placeholder="Enter Answer" class="styled-input">
+      <button onclick="checkClueAnswer()" class="styled-button">Check Answer</button>
+      <hr />
+      <div class='creator'>
+        <div class='wrapper'>
+          <img src="https://images.unsplash.com/photo-1620121692029-d088224ddc74?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80" alt="Creator" />
+        </div>
+        <p><ins>ObcYfest</ins> BrainOut</p>
+      </div>
     </div>
   </div>
 
-  <script src="script.js"></script>
+  <div class="nft" id="congratulations">
+    <div class='main'>
+      <img class='tokenImage' src="https://images.unsplash.com/photo-1621075160523-b936ad96132a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="NFT" />
+      <h2>Congratulations</h2>
+      <div class='tokenInfo'>
+        <div class="price">
+          <p id="time-taken" class="description">You completed the game in seconds</p>
+        </div>
+      </div>
+      <hr />
+      <div class='creator'>
+        <div class='wrapper'>
+          <img src="https://images.unsplash.com/photo-1620121692029-d088224ddc74?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80" alt="Creator" />
+        </div>
+        <p><ins>Obcyfest</ins> Brainout</p>
+      </div>
+    </div>
+  </div>
+
+<script src="script.js"></script>
 </body>
 </html>
